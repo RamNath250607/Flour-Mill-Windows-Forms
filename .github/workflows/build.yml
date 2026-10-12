@@ -1,0 +1,29 @@
+
+name: Build Flour Mill Windows App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Download source code
+        uses: actions/checkout@v4
+
+      - name: Install .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build and publish application
+        run: dotnet publish WinFormsApp1/WinFormsApp1.csproj -c Release -r win-x64 --self-contained true -o ./publish
+
+      - name: Save published application
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlourMill-Windows-App
+          path: ./publish/
